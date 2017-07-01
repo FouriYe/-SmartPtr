@@ -1,4 +1,4 @@
-//Ä¿Ç°»¹²»Ö§³ÖÖ¸Ïò³£Á¿×Ö·û´®
+//ç›®å‰è¿˜ä¸æ”¯æŒæŒ‡å‘å¸¸é‡å­—ç¬¦ä¸²
 
 
 #ifndef SMART_POINTER_H
@@ -27,44 +27,47 @@ public:
 template<typename T>
 class SmartPtr {
 public:
-	//¹¹Ôìº¯Êı
-	SmartPtr() :mpointer(nullptr) { PRINT_STR("creat a smart ptr"); }
+	//æ„é€ å‡½æ•°
+	SmartPtr() :mpointer(nullptr) { ref_count = new size_t(0); PRINT_STR("creat a smart ptr"); }
 	SmartPtr(T *p) :mpointer(p) { 
-		if (mpointer) ref_count=new size_t(1);
-		PRINT_PTR("creat a smart ptr at ", mpointer); 
+		ref_count = new size_t(1);
+		PRINT_PTR("creat a smart ptr at ", mpointer);
 	}
-	//¿½±´¹¹Ôì
-	SmartPtr(const SmartPtr<T> &p) :mpointer(p.mpointer),ref_count(p.ref_count) {
-		if (p.mpointer) (*ref_count)++;
+	//æ‹·è´æ„é€ 
+	SmartPtr(const SmartPtr<T> &p) {
+		if (&p) {
+			mpointer = p.mpointer;
+			ref_count = p.ref_count;
+			(*ref_count)++;
+		}
 	}
-	//¸³Öµ·ûÖØÔØ
+	//èµ‹å€¼ç¬¦é‡è½½
 	SmartPtr &operator=(const SmartPtr<T> &p) {
-		if (&p == this) return *this;
-		if (mpointer) {
-			if (*ref_count == 0) { 
-				delete mpointer; 
-				delete ref_count;
-				PRINT_STR("deconstruct!");
-			}
-			else if ((--(*ref_count)) == 0) {
+		if (&p == this) return *this;              //é˜²æ­¢è‡ªæˆ‘èµ‹å€¼
+        //é‡Šæ”¾åº•å±‚æŒ‡é’ˆ
+		if (*ref_count == 0) { 
+			delete mpointer; 
+			delete ref_count;
+			PRINT_STR("deconstruct!");
+		}
+		else if ((--(*ref_count)) == 0) {
 			delete mpointer;
 			delete ref_count;
 			PRINT_STR("deconstruct!");
-			}
 		}
 		mpointer = p.mpointer;
 		ref_count = p.ref_count;
 		(*ref_count)++;
 		return *this; 
 	}
-	//½âÒıÓÃ
+	//è§£å¼•ç”¨
 	T& operator*() const{
 		return *mpointer;
 	}
 	T* operator->() const{
 		return mpointer;
 	}
-	//±È½ÏºÍÅĞ¿Õ
+	//æ¯”è¾ƒå’Œåˆ¤ç©º
 	bool operator==(const T* p) {
 		return mpointer == p;
 	}
@@ -77,23 +80,21 @@ public:
 	bool operator!=(const SmartPtr& p) {
 		return mpointer != p.mpointer;
 	}
-	//Îö¹¹º¯Êı
+	//ææ„å‡½æ•°
 	~SmartPtr() {
 		PRINT_PTR("release a smart ptr at ", mpointer);
-		if(mpointer){
-			if (*ref_count == 0) {                //·ÀÖ¹³öÏÖref_countÒÑ¾­Îª0£¬×Ô¼õºóÎªÎŞÇî´óµÄÇé¿ö£¨ref_countÎªsize_tÀàĞÍ£©
-				delete mpointer;
-				delete ref_count;
-				PRINT_STR("deconstruct!");
-			}
-			else if ((--(*ref_count)) == 0) {
+		if (*ref_count == 0) {                //é˜²æ­¢å‡ºç°ref_countå·²ç»ä¸º0ï¼Œè‡ªå‡åä¸ºæ— ç©·å¤§çš„æƒ…å†µï¼ˆref_countä¸ºsize_tç±»å‹ï¼‰
 			delete mpointer;
 			delete ref_count;
 			PRINT_STR("deconstruct!");
-			}
+		}
+		else if ((--(*ref_count)) == 0) {
+		delete mpointer;
+		delete ref_count;
+		PRINT_STR("deconstruct!");
 		}
 	}
-	//µÃµ½ÒıÓÃ¼ÆÊı
+	//å¾—åˆ°å¼•ç”¨è®¡æ•°
 	size_t get_ref_count() {
 		return *ref_count;
 	}
@@ -103,4 +104,3 @@ private:
 };
 
 #endif
-
