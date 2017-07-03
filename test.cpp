@@ -1,4 +1,4 @@
-#ifdef _WINDOWS                 //¼ì²âÄÚ´æĞ¹Â©
+#ifdef _WINDOWS                 //æ£€æµ‹å†…å­˜æ³„æ¼
 #define _CRTDBG_MAP_ALLOC
 #include<crtdbg.h>
 #endif
@@ -10,7 +10,7 @@ using namespace std;
 void test1() {
 	cout << endl;
 	cout << "-------------------In test1---------------------" << endl;
-	//¼ì²âÖÇÄÜÖ¸ÕëÖ¸Ïò»ù±¾ÀàĞÍ
+	//æ£€æµ‹æ™ºèƒ½æŒ‡é’ˆæŒ‡å‘åŸºæœ¬ç±»å‹
 	SmartPtr<char> sp_char1;
 	SmartPtr<char> sp_char2 = nullptr;
 	SmartPtr<char> sp_char3 = new char('a');
@@ -33,7 +33,7 @@ void test1() {
 }
 
 void test2() {
-	//²âÊÔ¿½±´¹¹Ôìº¯ÊıÓë¸³ÖµÔËËã·û
+	//æµ‹è¯•æ‹·è´æ„é€ å‡½æ•°ä¸èµ‹å€¼è¿ç®—ç¬¦
 	cout << endl;
 	cout << "--------------------In test2--------------------" << endl;
 	SmartPtr<char> sp_char1 = new char('a');
@@ -51,7 +51,7 @@ void test2() {
 
 void test3() {
 	cout << "--------------------In test3----------------------" << endl;
-	//²âÊÔÒıÓÃ¼ÆÊı
+	//æµ‹è¯•å¼•ç”¨è®¡æ•°
 	int* p_int = new int();
 	SmartPtr<int> sp_Outer = p_int;
 	cout << "Ref Count (" << sp_Outer.get_ref_count() << ") outer 1." << endl;
@@ -61,20 +61,20 @@ void test3() {
 	}
 	cout << "Ref Count (" << sp_Outer.get_ref_count() << ") outer 2." << endl;
 	SmartPtr<int> sp_Outer2 = new int();
-	sp_Outer = sp_Outer2;// 1´¦new³öÀ´µÄint*½«»á±»×Ô¶¯ÊÍ·Å  
+	sp_Outer = sp_Outer2;// 1å¤„newå‡ºæ¥çš„int*å°†ä¼šè¢«è‡ªåŠ¨é‡Šæ”¾  
 	cout << "Ref Count (" << sp_Outer.get_ref_count() << ") outer 2." << endl;
 	cout << "--------------------Out test3---------------------" << endl;
 }
 void test4() {
-	//²âÊÔ½âÒıÓÃ£¬ÅĞ¿ÕºÍ±È½Ï
+	//æµ‹è¯•è§£å¼•ç”¨ï¼Œåˆ¤ç©ºå’Œæ¯”è¾ƒ
 {
-	cout << "=======testcase4_1=========" << endl;
+	cout << "--------------------In test4-1----------------------" << endl;
 	SmartPtr<test_type> sp_tt = new test_type();
 	(*sp_tt).func();
 	sp_tt->func();
-	cout << "==========================" << endl;
+	cout << "--------------------Out test4-1----------------------" << endl;
 }
-{	std::cout << "=======testcase4_2=========" << std::endl;
+{	std::cout << "--------------------In test4-2----------------------" << std::endl;
 	test_type *p_tt = new test_type();
 	SmartPtr<test_type> sp_tt = p_tt;
 
@@ -93,7 +93,7 @@ void test4() {
 	//        std::cout<< "sp_tt and spo_tt are same pointer" << std::endl;
 	if (spo_tt == spo_tt2) std::cout << "spo_tt and spo_tt2 are same pointer" << std::endl;
 	if (spo_tt != spo_tt2) std::cout << "spo_tt and spo_tt2 are not same pointer" << std::endl;
-	std::cout << "==========================" << std::endl;
+	std::cout << "--------------------Out test4-2----------------------" << std::endl;
 }
 }
 void test() {
@@ -105,7 +105,7 @@ void test() {
 
 int main() {
 #ifdef _WINDOWS
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF):
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 	test();
 	return 0;
