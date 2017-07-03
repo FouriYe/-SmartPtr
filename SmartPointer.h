@@ -28,7 +28,7 @@ template<typename T>
 class SmartPtr {
 public:
 	//构造函数
-	SmartPtr() :mpointer(nullptr) { ref_count = new size_t(0); PRINT_STR("creat a smart ptr"); }
+	SmartPtr() :mpointer(nullptr) { ref_count = new size_t(1); PRINT_STR("creat a smart ptr"); }
 	SmartPtr(T *p) :mpointer(p) { 
 		ref_count = new size_t(1);
 		PRINT_PTR("creat a smart ptr at ", mpointer);
@@ -45,12 +45,7 @@ public:
 	SmartPtr &operator=(const SmartPtr<T> &p) {
 		if (&p == this) return *this;              //防止自我赋值
         //释放底层指针
-		if (*ref_count == 0) { 
-			delete mpointer; 
-			delete ref_count;
-			PRINT_STR("deconstruct!");
-		}
-		else if ((--(*ref_count)) == 0) {
+		if ((--(*ref_count)) == 0) {
 			delete mpointer;
 			delete ref_count;
 			PRINT_STR("deconstruct!");
@@ -83,12 +78,7 @@ public:
 	//析构函数
 	~SmartPtr() {
 		PRINT_PTR("release a smart ptr at ", mpointer);
-		if (*ref_count == 0) {                //防止出现ref_count已经为0，自减后为无穷大的情况（ref_count为size_t类型）
-			delete mpointer;
-			delete ref_count;
-			PRINT_STR("deconstruct!");
-		}
-		else if ((--(*ref_count)) == 0) {
+		if ((--(*ref_count)) == 0) {
 		delete mpointer;
 		delete ref_count;
 		PRINT_STR("deconstruct!");
@@ -104,3 +94,4 @@ private:
 };
 
 #endif
+
